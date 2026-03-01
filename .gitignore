@@ -1,0 +1,8 @@
+out/
+node_modules/
+*.vsix
+.vscode-test/
+.DS_Store
+*.pyc
+__pycache__/
+*.dist-info/

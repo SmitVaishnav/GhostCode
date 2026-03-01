@@ -1,0 +1,13 @@
+.vscode/**
+src/**
+node_modules/**
+tsconfig.json
+**/*.ts
+**/*.map
+MULTI_FILE_HIDE_CHANGES.md
+GHOSTCODE_FULL_CONTEXT.md
+.gitignore
+*.vsix
+python/**/__pycache__/**
+python/**/*.pyc
+python/*.dist-info/**

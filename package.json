@@ -1,0 +1,256 @@
+{
+  "name": "ghostcode",
+  "displayName": "GhostCode",
+  "description": "Privacy proxy for developers — hide symbols before sharing code with AI",
+  "version": "0.1.7",
+  "publisher": "SmitVaishanav",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smitvaishnav/anti-ai"
+  },
+  "homepage": "https://github.com/smitvaishnav/anti-ai#readme",
+  "bugs": {
+    "url": "https://github.com/smitvaishnav/anti-ai/issues"
+  },
+  "keywords": [
+    "privacy",
+    "security",
+    "ai",
+    "llm",
+    "anonymize",
+    "ghost",
+    "code-privacy"
+  ],
+  "galleryBanner": {
+    "color": "#0a1628",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:python",
+    "onLanguage:cpp",
+    "onLanguage:c",
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ghostcode.hideFile",
+        "title": "Ghost: Hide File",
+        "icon": "$(eye-closed)"
+      },
+      {
+        "command": "ghostcode.hideProject",
+        "title": "Ghost: Hide Project",
+        "icon": "$(files)"
+      },
+      {
+        "command": "ghostcode.hideSelection",
+        "title": "Ghost: Hide Selection",
+        "icon": "$(selection)"
+      },
+      {
+        "command": "ghostcode.revealFile",
+        "title": "Ghost: Reveal File",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "ghostcode.showMap",
+        "title": "Ghost: Show Map",
+        "icon": "$(symbol-structure)"
+      },
+      {
+        "command": "ghostcode.refreshMap",
+        "title": "Ghost: Refresh Map",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "ghostcode.openWalkthrough",
+        "title": "Ghost: Get Started",
+        "icon": "$(question)"
+      },
+      {
+        "command": "ghostcode.showAuditLog",
+        "title": "Ghost: Audit Log",
+        "icon": "$(shield)"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "ghostcodeMap",
+          "name": "Ghost Map",
+          "icon": "$(symbol-structure)"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "ghostcodeMap",
+        "contents": "No ghost map loaded.\n\n[Hide Current File](command:ghostcode.hideFile)\n\n[Hide Project](command:ghostcode.hideProject)\n\n[Open Map File](command:ghostcode.showMap)\n\n[Audit Log](command:ghostcode.showAuditLog)\n\n[Get Started](command:ghostcode.openWalkthrough)",
+        "when": "!ghostcode.mapLoaded"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "ghostcode.hideFile",
+          "when": "resourceExtname =~ /\\.(py|cpp|cc|cxx|c|h|hpp|hxx)$/",
+          "group": "navigation@1"
+        },
+        {
+          "command": "ghostcode.revealFile",
+          "when": "resourceExtname =~ /\\.(py|cpp|cc|cxx|c|h|hpp|hxx)$/",
+          "group": "navigation@2"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "ghostcode.hideSelection",
+          "when": "editorHasSelection && resourceExtname =~ /\\.(py|cpp|cc|cxx|c|h|hpp|hxx)$/",
+          "group": "ghostcode@1"
+        },
+        {
+          "command": "ghostcode.hideFile",
+          "when": "resourceExtname =~ /\\.(py|cpp|cc|cxx|c|h|hpp|hxx)$/",
+          "group": "ghostcode@2"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "ghostcode.hideFile",
+          "when": "resourceExtname =~ /\\.(py|cpp|cc|cxx|c|h|hpp|hxx)$/",
+          "group": "ghostcode@1"
+        },
+        {
+          "command": "ghostcode.revealFile",
+          "when": "resourceExtname =~ /\\.(py|cpp|cc|cxx|c|h|hpp|hxx)$/",
+          "group": "ghostcode@2"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "ghostcode.hideFile",
+          "when": "resourceExtname =~ /\\.(py|cpp|cc|cxx|c|h|hpp|hxx)$/",
+          "group": "ghostcode@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "ghostcode.refreshMap",
+          "when": "view == ghostcodeMap",
+          "group": "navigation"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "ghostcode.hideFile",
+        "key": "cmd+shift+g h",
+        "mac": "cmd+shift+g h",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "ghostcode.hideProject",
+        "key": "cmd+shift+g p",
+        "mac": "cmd+shift+g p"
+      },
+      {
+        "command": "ghostcode.hideSelection",
+        "key": "cmd+shift+g s",
+        "mac": "cmd+shift+g s",
+        "when": "editorTextFocus && editorHasSelection"
+      }
+    ],
+    "configuration": {
+      "title": "GhostCode",
+      "properties": {
+        "ghostcode.pythonPath": {
+          "type": "string",
+          "default": "python3",
+          "description": "Path to Python interpreter for running GhostCode CLI"
+        }
+      }
+    },
+    "walkthroughs": [
+      {
+        "id": "ghostcode.welcome",
+        "title": "Get Started with GhostCode",
+        "description": "Learn how to hide, share, and restore your code with GhostCode.",
+        "steps": [
+          {
+            "id": "whatIsGhostCode",
+            "title": "What is GhostCode?",
+            "description": "GhostCode replaces your private symbols (variable names, functions, strings) with opaque tokens before you share code with AI. The AI sees `gv_001` instead of `customer_revenue`. After you get your answer, GhostCode restores everything.\n\n[Learn More](command:ghostcode.openWalkthrough)",
+            "media": {
+              "markdown": "media/step-what-is-ghostcode.md"
+            }
+          },
+          {
+            "id": "checkPython",
+            "title": "Check Python Setup",
+            "description": "GhostCode needs Python with the `ghostcode` package installed. Set your Python path in settings if it's not the default.\n\n[Open Python Settings](command:workbench.action.openSettings?%5B%22ghostcode.pythonPath%22%5D)",
+            "media": {
+              "markdown": "media/step-check-python.md"
+            },
+            "completionEvents": [
+              "onSettingChanged:ghostcode.pythonPath"
+            ]
+          },
+          {
+            "id": "hideFirstFile",
+            "title": "Hide Your First File",
+            "description": "Open a Python or C/C++ file and run the Hide command. Pick a privacy level and GhostCode will generate a ghost file with all symbols replaced.\n\n[Hide Current File](command:ghostcode.hideFile)",
+            "media": {
+              "markdown": "media/step-hide-file.md"
+            },
+            "completionEvents": [
+              "onCommand:ghostcode.hideFile"
+            ]
+          },
+          {
+            "id": "exploreMap",
+            "title": "Explore the Ghost Map",
+            "description": "After hiding, the Ghost Map sidebar shows every symbol mapping — grouped by kind (variables, functions, types). Click any entry to see its original name.\n\n[Open Ghost Map](command:ghostcodeMap.focus)",
+            "media": {
+              "markdown": "media/step-explore-map.md"
+            },
+            "completionEvents": [
+              "onCommand:ghostcode.showMap"
+            ]
+          },
+          {
+            "id": "revealToRestore",
+            "title": "Reveal to Restore",
+            "description": "When you're done with the AI, open the ghost file and run Reveal. GhostCode swaps every token back to its original name — your code is fully restored.\n\n[Reveal File](command:ghostcode.revealFile)",
+            "media": {
+              "markdown": "media/step-reveal.md"
+            },
+            "completionEvents": [
+              "onCommand:ghostcode.revealFile"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  }
+}
