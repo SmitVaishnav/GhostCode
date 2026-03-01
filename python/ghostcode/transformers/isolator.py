@@ -18,6 +18,7 @@ Strategy:
 
 import ast
 import re
+import textwrap
 
 
 class CppIsolator:
@@ -208,10 +209,11 @@ class PythonIsolator:
         if target_node is None:
             return None
 
-        # Extract function source
+        # Extract function source (dedent to remove class-level indentation)
         func_source = self._extract_node_source(source, target_node)
         if not func_source:
             return None
+        func_source = textwrap.dedent(func_source)
 
         # Find called functions
         called = self._find_calls(target_node)
@@ -224,7 +226,9 @@ class PythonIsolator:
                 if stub_node:
                     sig = self._get_function_signature(source, stub_node)
                     if sig:
-                        stubs.append(f"{sig}\n    pass  # stub")
+                        # Dedent to remove class-level indentation
+                        sig_stripped = textwrap.dedent(sig)
+                        stubs.append(f"{sig_stripped}\n    pass  # stub")
 
         # Find class context
         class_stub = self._find_class_context(tree, source, function_name)
